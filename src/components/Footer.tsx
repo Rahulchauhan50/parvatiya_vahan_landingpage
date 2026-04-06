@@ -31,29 +31,29 @@ export default function Footer() {
               <MapPin className="text-[#EB5310] w-4 h-4 mt-1" />
               <span className="text-slate-300">Dehradun, Uttarakhand, India</span>
             </li>
-            <li className="flex items-center gap-3">
+            {/* <li className="flex items-center gap-3">
               <Phone className="text-[#EB5310] w-4 h-4" />
               <span className="text-slate-300">+91 9520701701</span>
-            </li>
+            </li> */}
             <li className="flex items-center gap-3">
               <Mail className="text-[#EB5310] w-4 h-4" />
-              <span className="text-slate-300">support@pvss.org.in</span>
+              <span className="text-slate-300">Support@parvatiyavahan.com</span>
             </li>
           </ul>
         </div>
         
-        <div className="md:col-span-1">
+        {/* <div className="md:col-span-1">
           <h4 className="font-headline font-bold text-lg mb-6 text-[#EB5310]">Emergency Helpline</h4>
           <div className="bg-white/5 p-6 rounded-xl border border-white/10">
             <p className="text-xs uppercase tracking-widest text-slate-400 mb-2">Available 24/7</p>
             <a className="text-2xl font-bold font-headline text-white block mb-4" href="tel:+919520701701">+91 9520701701</a>
             <p className="text-xs text-slate-400">Call for immediate roadside or medical assistance in hill regions.</p>
           </div>
-        </div>
+        </div> */}
       </div>
       
       <div className="border-t border-white/5 py-8 text-center">
-        <p className="text-sm text-slate-400">© 2026 Parvatiya Vahan Samarthan Samiti (PVSS). All Rights Reserved.</p>
+        <p className="text-sm text-slate-400">© 2026 Parvatiya Vahan Samarthan Samiti Harrawala Railway Station Taxi Union. All Rights Reserved.</p>
       </div>
     </footer>
   );

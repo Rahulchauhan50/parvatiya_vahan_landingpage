@@ -57,7 +57,7 @@ export default function Hero() {
             transition={{ duration: 0.8 }}
           >
             <span className="inline-block px-4 py-1.5 mb-6 rounded-full bg-primary/20 text-white border border-primary/30 text-[0.6875rem] font-bold uppercase tracking-widest">
-              Registered NGO | Uttarakhand
+              PARVATIYA VAHAN SAMARTHAN SAMITI | Uttarakhand
             </span>
             <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-headline font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
               Navigate the Himalayas with <span className="text-[#ffb59c]">Confidence & Care.</span>
