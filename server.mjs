@@ -30,9 +30,9 @@ app.get('/api/places-autocomplete', async (req, res) => {
   }
 
   if (!GOOGLE_MAPS_API_KEY) {
-    return res.status(500).json({
-      success: false,
-      message: 'Missing Google Maps API key on server.',
+    return res.json({
+      success: true,
+      predictions: [],
     });
   }
 
@@ -64,9 +64,9 @@ app.get('/api/places-autocomplete', async (req, res) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Places autocomplete failed:', errorText);
-      return res.status(502).json({
-        success: false,
-        message: 'Failed to fetch location suggestions.',
+      return res.json({
+        success: true,
+        predictions: [],
       });
     }
 
@@ -87,9 +87,9 @@ app.get('/api/places-autocomplete', async (req, res) => {
     });
   } catch (error) {
     console.error('Places autocomplete error:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Unable to fetch location suggestions right now.',
+    return res.json({
+      success: true,
+      predictions: [],
     });
   }
 });
