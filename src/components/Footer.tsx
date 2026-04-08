@@ -17,10 +17,12 @@ export default function Footer() {
         <div className="md:col-span-1">
           <h4 className="font-headline font-bold text-lg mb-6">Quick Links</h4>
           <ul className="space-y-4 text-sm">
-            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="#home">Home</a></li>
-            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="#about">About Us</a></li>
-            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="#services">Services</a></li>
-            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="#causes">Our Causes</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/#home">Home</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/#about">About Us</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/#services">Services</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/#causes">Our Causes</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/privacy-policy">Privacy Policy</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/terms-and-conditions">Terms &amp; Conditions</a></li>
           </ul>
         </div>
         

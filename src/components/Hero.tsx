@@ -1,8 +1,14 @@
 import { motion } from "motion/react";
-import { useState, FormEvent } from "react";
+import { useEffect, useRef, useState, FormEvent } from "react";
 import { MapPin, Users, Phone, Mail, User } from "lucide-react";
 import { type MouseEvent } from "react";
 
+type PlaceSuggestion = {
+  placeId: string;
+  text: string;
+};
+
+type LocationField = "source" | "destination";
 
 export default function Hero() {
   const [formData, setFormData] = useState({
@@ -13,11 +19,139 @@ export default function Hero() {
     destination: "",
     seats: "1"
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeField, setActiveField] = useState<LocationField | null>(null);
+  const [suggestions, setSuggestions] = useState<Record<LocationField, PlaceSuggestion[]>>({
+    source: [],
+    destination: [],
+  });
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState<Record<LocationField, boolean>>({
+    source: false,
+    destination: false,
+  });
+  const debounceRef = useRef<Record<LocationField, ReturnType<typeof setTimeout> | null>>({
+    source: null,
+    destination: null,
+  });
+  const requestIdRef = useRef<Record<LocationField, number>>({
+    source: 0,
+    destination: 0,
+  });
 
-  const handleSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current.source) {
+        clearTimeout(debounceRef.current.source);
+      }
+      if (debounceRef.current.destination) {
+        clearTimeout(debounceRef.current.destination);
+      }
+    };
+  }, []);
+
+  const fetchLocationSuggestions = (field: LocationField, value: string) => {
+    const normalized = value.trim();
+
+    if (debounceRef.current[field]) {
+      clearTimeout(debounceRef.current[field]);
+      debounceRef.current[field] = null;
+    }
+
+    if (normalized.length < 3) {
+      setIsLoadingSuggestions((prev) => ({ ...prev, [field]: false }));
+      setSuggestions((prev) => ({ ...prev, [field]: [] }));
+      return;
+    }
+
+    setIsLoadingSuggestions((prev) => ({ ...prev, [field]: true }));
+    const requestId = requestIdRef.current[field] + 1;
+    requestIdRef.current[field] = requestId;
+
+    debounceRef.current[field] = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/places-autocomplete?input=${encodeURIComponent(normalized)}`);
+        const payload = await response.json();
+
+        if (requestId !== requestIdRef.current[field]) {
+          return;
+        }
+
+        if (response.ok && payload?.success && Array.isArray(payload?.predictions)) {
+          setSuggestions((prev) => ({
+            ...prev,
+            [field]: payload.predictions,
+          }));
+        } else {
+          setSuggestions((prev) => ({ ...prev, [field]: [] }));
+        }
+      } catch {
+        if (requestId !== requestIdRef.current[field]) {
+          return;
+        }
+        setSuggestions((prev) => ({ ...prev, [field]: [] }));
+      } finally {
+        if (requestId === requestIdRef.current[field]) {
+          setIsLoadingSuggestions((prev) => ({ ...prev, [field]: false }));
+        }
+      }
+    }, 250);
+  };
+
+  const handleLocationChange = (field: LocationField, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setActiveField(field);
+    fetchLocationSuggestions(field, value);
+  };
+
+  const selectLocation = (field: LocationField, suggestion: PlaceSuggestion) => {
+    setFormData((prev) => ({ ...prev, [field]: suggestion.text }));
+    setSuggestions((prev) => ({ ...prev, [field]: [] }));
+    setActiveField(null);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("Booking Request:", formData);
-    alert("Booking request submitted! Our team will contact you shortly.");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/book-ride', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const raw = await response.text();
+      let payload: { success?: boolean; message?: string } | null = null;
+      if (raw) {
+        try {
+          payload = JSON.parse(raw);
+        } catch {
+          payload = null;
+        }
+      }
+
+      if (!response.ok || !payload?.success) {
+        const apiMessage = payload?.message;
+        throw new Error(apiMessage || `Request failed with status ${response.status}.`);
+      }
+
+      alert('Booking request submitted! We have emailed you and our admin team.');
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        source: '',
+        destination: '',
+        seats: '1',
+      });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Something went wrong';
+      alert(`Unable to submit booking: ${message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
 
@@ -127,10 +261,36 @@ export default function Hero() {
                     type="text"
                     placeholder="Source (e.g. Dehradun)"
                     required
+                    autoComplete="off"
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                     value={formData.source}
-                    onChange={(e) => setFormData({...formData, source: e.target.value})}
+                    onChange={(e) => handleLocationChange("source", e.target.value)}
+                    onFocus={() => setActiveField("source")}
+                    onBlur={() => {
+                      window.setTimeout(() => {
+                        setActiveField((prev) => (prev === "source" ? null : prev));
+                      }, 120);
+                    }}
                   />
+                  {activeField === "source" && (isLoadingSuggestions.source || suggestions.source.length > 0) && (
+                    <div className="absolute top-full mt-2 z-30 w-full bg-inverse-surface border border-white/15 rounded-xl shadow-2xl overflow-hidden">
+                      {isLoadingSuggestions.source && (
+                        <div className="px-4 py-3 text-sm text-white/70">Searching locations...</div>
+                      )}
+                      {!isLoadingSuggestions.source &&
+                        suggestions.source.map((item) => (
+                          <button
+                            key={item.placeId}
+                            type="button"
+                            className="w-full text-left px-4 py-3 text-sm text-white hover:bg-white/10 transition-colors"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => selectLocation("source", item)}
+                          >
+                            {item.text}
+                          </button>
+                        ))}
+                    </div>
+                  )}
                 </div>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4" />
@@ -138,10 +298,37 @@ export default function Hero() {
                     type="text"
                     placeholder="Destination (e.g. Mussoorie)"
                     required
+                    autoComplete="off"
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                     value={formData.destination}
-                    onChange={(e) => setFormData({...formData, destination: e.target.value})}
+                    onChange={(e) => handleLocationChange("destination", e.target.value)}
+                    onFocus={() => setActiveField("destination")}
+                    onBlur={() => {
+                      window.setTimeout(() => {
+                        setActiveField((prev) => (prev === "destination" ? null : prev));
+                      }, 120);
+                    }}
                   />
+                  {activeField === "destination" &&
+                    (isLoadingSuggestions.destination || suggestions.destination.length > 0) && (
+                      <div className="absolute top-full mt-2 z-30 w-full bg-inverse-surface border border-white/15 rounded-xl shadow-2xl overflow-hidden">
+                        {isLoadingSuggestions.destination && (
+                          <div className="px-4 py-3 text-sm text-white/70">Searching locations...</div>
+                        )}
+                        {!isLoadingSuggestions.destination &&
+                          suggestions.destination.map((item) => (
+                            <button
+                              key={item.placeId}
+                              type="button"
+                              className="w-full text-left px-4 py-3 text-sm text-white hover:bg-white/10 transition-colors"
+                              onMouseDown={(e) => e.preventDefault()}
+                              onClick={() => selectLocation("destination", item)}
+                            >
+                              {item.text}
+                            </button>
+                          ))}
+                      </div>
+                    )}
                 </div>
               </div>
 
@@ -162,9 +349,10 @@ export default function Hero() {
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full cursor-pointer primary-cta-gradient text-white py-4 rounded-xl font-bold font-headline text-lg shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all mt-4"
               >
-                Book Ride Now
+                {isSubmitting ? 'Sending...' : 'Book Ride Now'}
               </button>
               <p className="text-center text-white/40 text-xs mt-4">
                 By booking, you agree to our safety protocols and mountain transit terms.
