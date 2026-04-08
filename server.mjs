@@ -11,10 +11,16 @@ const GOOGLE_MAPS_API_KEY =
   process.env.GOOGLE_MAPS_API_KEY ||
   process.env.GOOGLE_PLACES_API_KEY ||
   process.env.GOOGLE_MAPS_SERVER_API_KEY;
+const MIN_PLACES_RADIUS_METERS = 1;
+const MAX_PLACES_RADIUS_METERS = 50000;
+const rawBiasRadius = Number(process.env.UTTARAKHAND_BIAS_RADIUS_METERS || 120000);
+const safeBiasRadius = Number.isFinite(rawBiasRadius)
+  ? Math.min(MAX_PLACES_RADIUS_METERS, Math.max(MIN_PLACES_RADIUS_METERS, rawBiasRadius))
+  : MAX_PLACES_RADIUS_METERS;
 const UTTARAKHAND_BIAS = {
   latitude: Number(process.env.UTTARAKHAND_BIAS_LAT || 30.3165),
   longitude: Number(process.env.UTTARAKHAND_BIAS_LNG || 78.0322),
-  radiusMeters: Number(process.env.UTTARAKHAND_BIAS_RADIUS_METERS || 120000),
+  radiusMeters: safeBiasRadius,
 };
 
 app.use(express.json());
