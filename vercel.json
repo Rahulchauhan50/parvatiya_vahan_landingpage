@@ -5,7 +5,7 @@
       "has": [
         {
           "type": "host",
-          "value": "parvatiyavahan.com"
+          "value": "www.parvatiyavahan.com"
         }
       ],
       "destination": "https://parvatiyavahan.com/$1",
