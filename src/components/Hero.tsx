@@ -149,6 +149,7 @@ export default function Hero() {
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Something went wrong';
       alert(`Unable to submit booking: ${message}`);
+      console.error('Booking submission error:', error);
     } finally {
       setIsSubmitting(false);
     }

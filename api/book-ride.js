@@ -1,4 +1,4 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
 const BRAND = {
   name: 'Parvatiya Vahan Samarthan Samiti',
@@ -6,7 +6,7 @@ const BRAND = {
   tagline: 'Empowering Mountain Drivers Across the Himalayas',
   teamName: 'Parvatiya Vahan Team',
   logoUrl: process.env.BRAND_LOGO_URL || '',
-  fromEmail: process.env.MAIL_FROM || 'onboarding@resend.dev',
+  fromEmail: process.env.MAIL_USER || process.env.MAIL_FROM || '',
   adminEmail: process.env.ADMIN_EMAIL || '',
   primary: '#1a56db',
   primaryDark: '#1e3a8a',
@@ -188,8 +188,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method Not Allowed' });
   }
 
-  if (!process.env.RESEND_API_KEY) {
-    console.error('RESEND_API_KEY environment variable is not set');
+  if (!process.env.MAIL_USER || !process.env.MAIL_APP_PASSWORD) {
+    console.error('MAIL_USER or MAIL_APP_PASSWORD environment variable is not set');
     return res.status(500).json({ success: false, message: 'Server email configuration is missing. Please contact support.' });
   }
 
@@ -208,30 +208,28 @@ export default async function handler(req, res) {
     seats: escapeHtml(seats),
   };
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_APP_PASSWORD,
+    },
+  });
 
   try {
-    const adminResult = await resend.emails.send({
-      from: BRAND.name + ' <' + BRAND.fromEmail + '>',
+    await transporter.sendMail({
+      from: '"' + BRAND.name + '" <' + process.env.MAIL_USER + '>',
       to: [BRAND.adminEmail],
       subject: '🏔️ New Ride Booking — ' + name + ' | PVSS',
       html: getAdminEmailHtml(safe),
     });
 
-    if (adminResult.error) {
-      throw new Error('Admin email failed: ' + adminResult.error.message);
-    }
-
-    const userResult = await resend.emails.send({
-      from: BRAND.name + ' <' + BRAND.fromEmail + '>',
+    await transporter.sendMail({
+      from: '"' + BRAND.name + '" <' + process.env.MAIL_USER + '>',
       to: [email],
       subject: '✅ Booking Confirmed — Thank you, ' + name + '! | PVSS',
       html: getUserThankYouEmailHtml(safe),
     });
-
-    if (userResult.error) {
-      throw new Error('User confirmation email failed: ' + userResult.error.message);
-    }
 
     return res.status(200).json({ success: true, message: 'Booking request sent successfully.' });
   } catch (error) {

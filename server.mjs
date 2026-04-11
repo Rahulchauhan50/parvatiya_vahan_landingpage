@@ -354,7 +354,7 @@ app.post('/api/book-ride', async (req, res) => {
     destination: escapeHtml(destination),
     seats: escapeHtml(seats),
   };
-
+ 
   const adminMail = {
     from: `"${BRAND.name}" <${process.env.MAIL_USER}>`,
     to: process.env.ADMIN_EMAIL,
