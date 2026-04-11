@@ -155,6 +155,11 @@ export default function Hero() {
     }
   };
 
+  const handlePhoneChange = (value: string) => {
+    const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+    setFormData((prev) => ({ ...prev, phone: digitsOnly }));
+  };
+
 
 
     const handleNavClick = (targetId: string) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -232,13 +237,19 @@ export default function Hero() {
                 </div>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-white/50 w-4 h-4" />
+                  <span className="absolute left-10 top-1/2 -translate-y-1/2 text-white/80 text-sm font-semibold">+91</span>
                   <input
                     type="tel"
                     placeholder="Phone Number"
                     required
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                    inputMode="numeric"
+                    minLength={10}
+                    maxLength={10}
+                    pattern="[0-9]{10}"
+                    title="Please enter a valid 10-digit mobile number"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-20 pr-4 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                     value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    onChange={(e) => handlePhoneChange(e.target.value)}
                   />
                 </div>
               </div>
