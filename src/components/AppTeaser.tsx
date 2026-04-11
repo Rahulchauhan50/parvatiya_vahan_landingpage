@@ -19,9 +19,12 @@ export default function AppTeaser() {
             className="lg:col-span-7 flex flex-col justify-center"
           >
             <div className="mb-8 md:mb-12">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-headline font-extrabold text-on-background mb-6 tracking-tight">Introducing PAVAN</h2>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-headline font-extrabold text-on-background mb-6 tracking-tight">App Description - Play Store</h2>
               <p className="text-base sm:text-lg text-on-background/70 leading-relaxed max-w-xl">
-                The Parvatiya App for Vehicle-Assistance & Navigation. A localized digital mobility ecosystem built for Himalayan terrain, local operators, and community-first transport.
+                Parvatiya Vahan Mobility is a smart transportation platform offering safe, reliable, and affordable ride solutions. Built with a mission to empower drivers and enhance passenger experience, the platform integrates technology with real-world mobility needs.
+              </p>
+              <p className="text-base sm:text-lg text-on-background/70 leading-relaxed max-w-xl mt-4">
+                In collaboration with Parvatiya Vahan Samarthan Samiti, we also support driver welfare and road safety initiatives across regions.
               </p>
             </div>
             

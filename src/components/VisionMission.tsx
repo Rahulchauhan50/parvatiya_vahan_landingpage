@@ -13,7 +13,7 @@ export default function VisionMission() {
     {
       title: "Our Mission",
       description:
-        "Deliver safe, reliable transport in difficult terrain while uplifting native drivers through training, legal protection, welfare support, and fair digital access via the PAVAN ecosystem.",
+        "To build a reliable and technology-enabled mobility ecosystem that empowers drivers, enhances passenger safety, and supports sustainable livelihood opportunities.",
       icon: <Target className="w-8 h-8" />,
       accent: "from-tertiary-container/40 to-tertiary-container/10",
     },

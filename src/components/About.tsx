@@ -1,10 +1,11 @@
 import { motion } from "motion/react";
+import { Scale, ShieldCheck } from "lucide-react";
 
 export default function About() {
   return (
     <section id="about" className="py-16 md:py-24 bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-center mb-16">
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -33,14 +34,63 @@ export default function About() {
             viewport={{ once: true }}
             className="lg:w-1/2 order-1 lg:order-2"
           >
-            <span className="font-headline text-[0.6875rem] font-bold uppercase tracking-widest text-primary mb-4 block">About Us</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-headline font-extrabold text-on-background mb-6 md:mb-8 tracking-tight">A Lifeline for Mountain Mobility</h2>
+            <span className="font-headline text-[0.6875rem] font-bold uppercase tracking-widest text-primary mb-4 block">ABOUT US (Main Section)</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-headline font-extrabold text-on-background mb-6 md:mb-8 tracking-tight">Parvatiya Vahan Mobility LLP</h2>
             <p className="text-base sm:text-lg text-on-background/70 leading-relaxed mb-6">
-              Parvatiya Vahan Samarthan Samiti (PVSS) is a registered NGO based near Harrawala, Dehradun. We work at the intersection of transport, technology, and social welfare to keep Uttarakhand's mountain communities connected, safe, and economically active.
+              Parvatiya Vahan Mobility LLP is a technology-driven mobility enterprise focused on transforming transportation services through innovation, safety, and efficiency.
+            </p>
+            <p className="text-base sm:text-lg text-on-background/70 leading-relaxed mb-6">
+              We work closely with Parvatiya Vahan Samarthan Samiti, a social organization dedicated to driver welfare, road safety awareness, and community development.
             </p>
             <p className="text-base sm:text-lg text-on-background/70 leading-relaxed mb-8">
-              From village cargo routes and Char Dham support to emergency response and driver rights advocacy, PVSS is building a stronger Himalayan transport ecosystem powered by local experience and community trust.
+              While the LLP operates as an independent commercial entity, this collaboration enables us to combine business excellence with meaningful social impact.
             </p>
+          </motion.div>
+        </div>
+
+        {/* Legal Disclosures */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="relative overflow-hidden rounded-2xl border border-on-background/10 bg-surface-container-low p-7 shadow-sm"
+          >
+            <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-5">
+                <Scale className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-headline font-bold text-on-background mb-4">RELATIONSHIP DISCLOSURE</h3>
+              <p className="text-sm sm:text-base text-on-background/75 leading-relaxed mb-4">
+                Parvatiya Vahan Mobility LLP is an independent legal entity and operates as a commercial enterprise. It collaborates with Parvatiya Vahan Samarthan Samiti on various social and community initiatives.
+              </p>
+              <p className="text-sm sm:text-base text-on-background/75 leading-relaxed">
+                The NGO does not hold any ownership, partnership, or profit-sharing rights in the LLP. All collaborations are conducted on a transparent and arm's length basis in compliance with applicable laws.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+            className="relative overflow-hidden rounded-2xl border border-on-background/10 bg-surface-container-low p-7 shadow-sm"
+          >
+            <div className="absolute inset-0 bg-linear-to-br from-on-background/5 to-transparent pointer-events-none" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-on-background/5 text-on-background/70 flex items-center justify-center mb-5">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-headline font-bold text-on-background mb-4">LEGAL DISCLAIMER</h3>
+              <p className="text-sm sm:text-base text-on-background/75 leading-relaxed mb-4">
+                Disclaimer: Parvatiya Vahan Mobility LLP is an independent commercial entity. Any association with Parvatiya Vahan Samarthan Samiti is limited to collaborative initiatives for social impact and does not imply ownership, control, or profit-sharing.
+              </p>
+              <p className="text-sm sm:text-base text-on-background/75 leading-relaxed">
+                All services offered by the LLP are governed by applicable commercial laws and regulations.
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>
