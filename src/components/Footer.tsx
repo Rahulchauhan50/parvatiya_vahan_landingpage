@@ -23,6 +23,7 @@ export default function Footer() {
             <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/#causes">Our Causes</a></li>
             <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/privacy-policy">Privacy Policy</a></li>
             <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/terms-and-conditions">Terms &amp; Conditions</a></li>
+            <li><a className="text-slate-300 hover:text-white hover:underline decoration-[#EB5310] underline-offset-4 transition-all" href="/account-deletion">Account Deletion</a></li>
           </ul>
         </div>
         
